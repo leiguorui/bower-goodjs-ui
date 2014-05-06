@@ -1,8 +1,11 @@
-/*! goodow-ui 2014-05-04 */
 angular.module('goodow.ui',[
     'goodow.ui.services',
     'goodow.ui.svg'
-]);var serviceModule;
+])
+/* Services */
+
+
+var serviceModule;
 
 // Demonstrate how to register services
 // In this case it is a simple value service.
@@ -193,7 +196,8 @@ angular.module('goodow.ui',[
 //      testServiceProvider.setData('hello world');
 //  }]);
 })(window,angular);
-;'use strict';
+
+'use strict';
 
 /* Controllers */
 
