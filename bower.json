@@ -1,0 +1,16 @@
+{
+    "name":"bower-goodjs-ui",
+    "description":"bower-goodjs-ui",
+    "main":["./goodjs-ui.js","goodjs-ui.min.js"],
+    "dependencies": {
+        "realtime-channel":"goodow/bower-realtime-channel",
+        "d3":"3.4.6",
+        "angular-touch":"1.2.14",
+        "bootstrap":"3.1.1",
+        "angular-bootstrap":"0.10.0"
+    },
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/shangmin1990/bower-goodjs-ui.git"
+    }
+}
