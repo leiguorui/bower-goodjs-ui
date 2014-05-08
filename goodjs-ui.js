@@ -59,7 +59,7 @@ var serviceModule;
   .factory('goodowConstant', function(){
     return {
       SVG_SID:'someaddress.s',
-      SERVER:'http://localhost:8080/eventbus'
+      SERVER:'http://realtime.goodow.com:8080/eventbus'
     }
   })
   .factory('realtimeService',['goodowConstant',function(goodowConstant){
