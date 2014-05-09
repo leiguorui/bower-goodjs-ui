@@ -297,8 +297,8 @@ angular.module('goodow.ui.svg', ['goodow.ui.services'])
 
 		// var ellipseConfig = angular.extend({},defaultConfig);
 		var configuration;
-			configuration = angular.extend({},defaultConfig);
-
+	    configuration = angular.extend({},defaultConfig);
+        configuration.d = [];
 
 
 		scope.$watch('data',function(){
@@ -312,11 +312,57 @@ angular.module('goodow.ui.svg', ['goodow.ui.services'])
 
 		});
         //
-		var ellipse,rect,path;
+		var ellipse,rect,path,line;
 
 //		BindAction
         //DOM element
         var svgElement = element.find('svg')[0];
+
+        d3.select(svgElement).on('click',function(){
+            var self_ = this;
+            if(scope.shape == 'line'){
+                if(configuration.d.length == 0){
+                    configuration.type = 'path';
+                    configuration.d.push([d3.event.offsetX,d3.event.offsetY]);
+                    configuration.canDraw = true;
+                    configuration.hasDrawFinish = false;
+                    line = initDrawPen(configuration);
+                }else{
+                    d3.select(self_).attr('style','cursor:default');
+                    configuration.canDraw = false;
+                    configuration.hasDrawFinish = true;
+                    var sendData = {};
+                    var path_stroke_width = (scope.stroke_width == undefined||scope.stroke_width==0)?1:scope.stroke_width;
+                    var path_stroke = scope.stroke==undefined?'black':scope.stroke;
+                    line.attr('d',lineFunction(configuration.d))
+                        .attr('stroke-width',path_stroke_width)
+                        .attr('stroke',path_stroke)
+                        .attr('fill','none')
+                        .attr('stroke-dasharray','');
+                    sendData.path = {};
+                    sendData.path['d'] = configuration.d;
+                    sendData.path['fill'] = scope.fill;
+                    sendData.path['stroke'] = path_stroke;
+                    sendData.path['stroke-width'] = path_stroke_width;
+
+                    scope.$apply(function(scope){
+                        scope.sendData = sendData;
+                        console.log(JSON.stringify(sendData));
+                    });
+                    configuration = angular.extend({},defaultConfig);
+                    configuration.d = [];
+                }
+            }
+            d3.select(self_).on('mousemove',function(){
+                if(!configuration.canDraw)
+                    return;
+                d3.select(this).attr('style','cursor:crosshair');
+                configuration.d = [configuration.d[0]];
+                configuration.d.push([d3.event.offsetX,d3.event.offsetY]);
+                line.attr('d',lineFunction(configuration.d));
+            });
+        });
+
 		d3.select(svgElement).on('mousedown',function(){
          //DOM element
 		 var self_ = this;
@@ -352,6 +398,8 @@ angular.module('goodow.ui.svg', ['goodow.ui.services'])
                      configuration.hasDrawFinish = false;
                      path = initDrawPen(configuration);
                      break;
+                 case 'line':
+                     return;
 
              }
 		 }
